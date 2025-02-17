@@ -6,6 +6,7 @@ import ie.jprendiville.spring6webapp.domain.Publisher;
 import ie.jprendiville.spring6webapp.repositories.AuthorRepository;
 import ie.jprendiville.spring6webapp.repositories.BookRepository;
 import ie.jprendiville.spring6webapp.repositories.PublisherRepository;
+import ie.jprendiville.spring6webapp.services.AuthorService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.apache.logging.log4j.LogManager;
@@ -20,11 +21,13 @@ public class BootstrapData implements CommandLineRunner {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
     private final PublisherRepository publisherRepository;
+    private final AuthorService authorService;
 
-    public BootstrapData(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository) {
+    public BootstrapData(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository, AuthorService authorService) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
         this.publisherRepository = publisherRepository;
+        this.authorService = authorService;
     }
 
     @Override
@@ -138,7 +141,7 @@ public class BootstrapData implements CommandLineRunner {
         logger.info("Book count: " + bookRepository.count());
         logger.info("Publisher count: " + publisherRepository.count());
 
-        for (Author author : authorRepository.findAll()) {
+        for (Author author : authorService.findAll()) {
             for (Book book : author.getBooks()) {
                 logger.info(author.getFullName() + " wrote '" + book.getTitle() + "', published by " + book.getPublisher().getName());
             }
